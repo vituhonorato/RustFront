@@ -1,32 +1,25 @@
 use yew::prelude::*;
 
-struct Model {
-    value: i64
-}
+#[function_component]
+fn App() -> Html {
+    let state = use_state(|| 0);
 
-#[function_component(App)]
-fn app() -> Html {
-    let state = use_state(|| Model {
-        value: 0
-    });
-
-    let onclick = {
+    let incr_counter = {
         let state = state.clone();
+        Callback::from(move |_| state.set(*state + 1))
+    };
 
-        Callback::from(move |_| {
-            state.set(Model {
-                value: state.value + 1
-            })
-        })
+    let decr_counter = {
+        let state = state.clone();
+        Callback::from(move |_| state.set(*state - 1))
     };
 
     html! {
-        <div>
-            <button {onclick}>
-                { "+1" }
-            </button>
-            <p>{ state.value }</p>
-        </div>
+        <>
+            <p> {"current count: "} {*state} </p>
+            <button onclick={incr_counter}> {"+"} </button>
+            <button onclick={decr_counter}> {"-"} </button>
+        </>
     }
 }
 
